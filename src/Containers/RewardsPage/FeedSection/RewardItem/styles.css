@@ -1,0 +1,7 @@
+.reward-item {
+  display: flex;
+}
+
+.reward-item__right-part {
+  padding: 0.5rem 0.25rem;
+}

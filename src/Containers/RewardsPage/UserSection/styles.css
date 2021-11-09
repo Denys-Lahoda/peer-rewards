@@ -1,0 +1,31 @@
+.user-section {
+  display: flex;
+  align-items: center;
+  padding: 3.75rem;
+}
+
+.user-section > * {
+  padding-right: 5.625rem;
+}
+
+.user-section > *:last-child {
+  padding-right: 0;
+}
+
+.user-section__user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-section__value-block > * {
+  font-weight: 500;
+}
+
+/* .user-section__value-block__label {
+  font-size: 14px;
+} */
+
+.user-section__value-block__value {
+  font-size: 21px;
+}

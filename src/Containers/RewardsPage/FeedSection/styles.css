@@ -1,0 +1,39 @@
+.feed-section {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.feed-section__tabs {
+  position: relative;
+}
+
+.feed-section__divider-button-wrapper {
+  position: absolute;
+  right: 60px;
+  bottom: 0;
+  transform: translateY(50%);
+  background-color: white;
+}
+
+.feed-section__divider-button {
+  height: 3.5rem;
+  width: 3.5rem;
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.feed-section__reward-list {
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: #f7f9fa;
+}
+
+.feed-section__reward-list > * {
+  padding-bottom: 1rem;
+}
+
+.feed-section__reward-list > *:last-child {
+  padding-bottom: 0;
+}
