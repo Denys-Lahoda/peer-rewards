@@ -2,13 +2,12 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import IconButton from "@mui/material/IconButton";
-import AddIcon from "@mui/icons-material/Add";
 
 import "./styles.css";
 import MOCK_DATA from "./MOCK_DATA.json";
 
 import RewardItem from "./RewardItem/RewardItem";
+import SendReward from "./SendReward/SendReward";
 import { TabPanel } from "../../../Components";
 
 function FeedSection() {
@@ -40,9 +39,7 @@ function FeedSection() {
           <Tab label="My Rewards" />
         </Tabs>
         <div className="feed-section__divider-button-wrapper">
-          <IconButton className="feed-section__divider-button">
-            <AddIcon sx={{ fontSize: "2.5rem" }} />
-          </IconButton>
+          <SendReward />
         </div>
       </Box>
       <div>

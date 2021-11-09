@@ -1,0 +1,7 @@
+.send-reward-button {
+  height: 3.5rem;
+  width: 3.5rem;
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.12);
+}

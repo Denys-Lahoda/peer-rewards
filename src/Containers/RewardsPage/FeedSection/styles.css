@@ -14,14 +14,7 @@
   bottom: 0;
   transform: translateY(50%);
   background-color: white;
-}
-
-.feed-section__divider-button {
-  height: 3.5rem;
-  width: 3.5rem;
-  border-width: 2px;
-  border-style: solid;
-  border-color: rgba(0, 0, 0, 0.12);
+  border-radius: 50vh;
 }
 
 .feed-section__reward-list {
