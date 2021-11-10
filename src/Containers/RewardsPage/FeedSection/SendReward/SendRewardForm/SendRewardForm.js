@@ -4,9 +4,19 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const schema = z.object({
+  to: z.string().nonempty({ message: "Required" }),
+  rewardAmount: z.preprocess((val) => Number(val), z.number().min(5)),
+  reason: z.string().nonempty({ message: "Required" }),
+});
 
 function SendRewardForm() {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm({
+    resolver: zodResolver(schema),
+  });
   const onSubmit = (data) => console.log(data);
 
   const checkKeyDown = (e) => {
@@ -23,14 +33,21 @@ function SendRewardForm() {
         name="to"
         control={control}
         defaultValue=""
-        render={({ field }) => (
+        render={({ field, fieldState: { error } }) => (
           <TextField
+            required
             variant="outlined"
             label="To"
             placeholder="Alex Brown"
             className="send-reward-form__text-field"
             InputLabelProps={{ shrink: true }}
             InputProps={{ ...field }}
+            {...(error
+              ? {
+                  error: true,
+                  helperText: error.message,
+                }
+              : {})}
           />
         )}
       />
@@ -38,8 +55,9 @@ function SendRewardForm() {
         name="rewardAmount"
         control={control}
         defaultValue=""
-        render={({ field }) => (
+        render={({ field, fieldState: { error } }) => (
           <TextField
+            required
             variant="outlined"
             label="Reward"
             placeholder="0"
@@ -47,6 +65,12 @@ function SendRewardForm() {
             className="send-reward-form__text-field"
             InputLabelProps={{ shrink: true }}
             InputProps={{ ...field }}
+            {...(error
+              ? {
+                  error: true,
+                  helperText: error.message,
+                }
+              : {})}
           />
         )}
       />
@@ -54,8 +78,9 @@ function SendRewardForm() {
         name="reason"
         control={control}
         defaultValue=""
-        render={({ field }) => (
+        render={({ field, fieldState: { error } }) => (
           <TextField
+            required
             multiline
             variant="outlined"
             label="Reason"
@@ -63,6 +88,12 @@ function SendRewardForm() {
             className="send-reward-form__text-field"
             InputLabelProps={{ shrink: true }}
             InputProps={{ ...field }}
+            {...(error
+              ? {
+                  error: true,
+                  helperText: error.message,
+                }
+              : {})}
           />
         )}
       />
