@@ -2,27 +2,31 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import { format } from "date-fns";
 
 import "./styles.css";
 import MOCK_DATA from "./MOCK_DATA.json";
 
-import RewardItem from "./RewardItem/RewardItem";
+import RewardsList from "./RewardsList/RewardsList";
 import SendReward from "./SendReward/SendReward";
 import { TabPanel } from "../../../Components";
 
-function FeedSection() {
-  const data = React.useMemo(
-    () =>
-      Array.isArray(MOCK_DATA)
-        ? MOCK_DATA.sort(
-            (a, b) => new Date(+b.createDate) - new Date(+a.createDate)
-          )
-        : [],
-    [MOCK_DATA]
-  );
+const processDataEntry = (dataEntry) => ({
+  ...dataEntry,
+  formattedDate: format(new Date(+dataEntry.createDate), "MMM d, yyyy"),
+});
 
+function FeedSection() {
   const currentUserId = "000001"; // Hardcoded value for demo. Related to value in MOCK_DATA
   const [value, setValue] = React.useState(0);
+  const [data, setData] = React.useState([]);
+
+  React.useEffect(() => {
+    Promise.resolve({ data: MOCK_DATA }).then(({ data: fetchedData }) => {
+      const processedData = fetchedData.map(processDataEntry);
+      setData(processedData);
+    });
+  }, []);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -42,22 +46,14 @@ function FeedSection() {
           <SendReward />
         </div>
       </Box>
-      <div>
-        <TabPanel value={value} index={0}>
-          <div className="feed-section__reward-list">
-            {data.map((entry) => (
-              <RewardItem key={entry.id} {...entry} />
-            ))}
-          </div>
+      <div className="flex flex-col flex-grow">
+        <TabPanel value={value} index={0} className="flex flex-col flex-grow">
+          <RewardsList data={data} />
         </TabPanel>
-        <TabPanel value={value} index={1}>
-          <div className="feed-section__reward-list">
-            {data
-              .filter((entry) => entry.userId === currentUserId)
-              .map((entry) => (
-                <RewardItem key={entry.id} {...entry} />
-              ))}
-          </div>
+        <TabPanel value={value} index={1} className="flex flex-col flex-grow">
+          <RewardsList
+            data={data.filter(({ userId }) => userId === currentUserId)}
+          />
         </TabPanel>
       </div>
     </div>

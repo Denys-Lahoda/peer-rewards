@@ -2,17 +2,15 @@ import React from "react";
 import "./styles.css";
 import Typography from "@mui/material/Typography";
 
-import { UserAvatar } from "../../../../Components";
+import { UserAvatar } from "../../../../../Components";
 
 function RewardItem({
   userAvatarUrl,
   userFullName,
   senderFullName,
-  createDate,
+  formattedDate,
   message,
 }) {
-  const formattedDate = new Date(+createDate).toLocaleDateString("en-US"); // TODO format date to "MMM d, YYYY"
-
   return (
     <div className="reward-item">
       <div>

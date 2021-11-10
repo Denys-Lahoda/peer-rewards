@@ -16,17 +16,3 @@
   background-color: white;
   border-radius: 50vh;
 }
-
-.feed-section__reward-list {
-  flex-grow: 1;
-  padding: 2rem;
-  background-color: #f7f9fa;
-}
-
-.feed-section__reward-list > * {
-  padding-bottom: 1rem;
-}
-
-.feed-section__reward-list > *:last-child {
-  padding-bottom: 0;
-}
