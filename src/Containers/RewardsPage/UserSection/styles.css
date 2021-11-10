@@ -22,10 +22,18 @@
   font-weight: 500;
 }
 
-/* .user-section__value-block__label {
-  font-size: 14px;
-} */
-
 .user-section__value-block__value {
   font-size: 21px;
+}
+
+@media screen and (max-width: 600px) {
+  .user-section {
+    flex-direction: column;
+  }
+
+  .user-section > * {
+    text-align: center;
+    padding-right: 0;
+    padding-bottom: 1rem;
+  }
 }
