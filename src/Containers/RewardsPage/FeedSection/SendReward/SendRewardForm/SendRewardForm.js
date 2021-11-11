@@ -3,21 +3,55 @@ import "./styles.css";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import CircularProgress from "@mui/material/CircularProgress";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+import { rewards } from "../../../../../api";
+import processDataEntry from "../../utils/processDataEntry";
+import { actions } from "../../dataReducer";
+import { FeedSectionContext } from "../../FeedSection";
+
 const schema = z.object({
-  to: z.string().nonempty({ message: "Required" }),
-  rewardAmount: z.preprocess((val) => Number(val), z.number().min(5)),
-  reason: z.string().nonempty({ message: "Required" }),
+  userFullName: z.string().nonempty({ message: "Required" }),
+  amount: z.preprocess((val) => Number(val), z.number().min(5)),
+  message: z.string().nonempty({ message: "Required" }),
 });
 
+const defaultValues = {
+  userFullName: "",
+  amount: "",
+  message: "",
+};
+
 function SendRewardForm() {
-  const { control, handleSubmit } = useForm({
+  const context = React.useContext(FeedSectionContext);
+  const [submitting, setSubmitting] = React.useState(false);
+  const { control, handleSubmit, reset } = useForm({
+    defaultValues,
     resolver: zodResolver(schema),
   });
-  const onSubmit = (data) => console.log(data);
+
+  const onSubmit = (data) => {
+    setSubmitting(true);
+    console.log(data);
+
+    const payload = { ...data };
+
+    rewards
+      .sendReward(payload)
+      .then((response) => {
+        if (response.status === 200) {
+          const processedDataEntry = processDataEntry(response.data);
+          context.dataDispatch(actions.addItem(processedDataEntry));
+        }
+      })
+      .finally(() => {
+        reset();
+        setSubmitting(false);
+      });
+  };
 
   const checkKeyDown = (e) => {
     if (e.keyCode === 13) e.preventDefault();
@@ -30,7 +64,7 @@ function SendRewardForm() {
       onKeyDown={(e) => checkKeyDown(e)}
     >
       <Controller
-        name="to"
+        name="userFullName"
         control={control}
         defaultValue=""
         render={({ field, fieldState: { error } }) => (
@@ -42,6 +76,7 @@ function SendRewardForm() {
             className="send-reward-form__text-field"
             InputLabelProps={{ shrink: true }}
             InputProps={{ ...field }}
+            disabled={submitting}
             {...(error
               ? {
                   error: true,
@@ -52,7 +87,7 @@ function SendRewardForm() {
         )}
       />
       <Controller
-        name="rewardAmount"
+        name="amount"
         control={control}
         defaultValue=""
         render={({ field, fieldState: { error } }) => (
@@ -65,6 +100,7 @@ function SendRewardForm() {
             className="send-reward-form__text-field"
             InputLabelProps={{ shrink: true }}
             InputProps={{ ...field }}
+            disabled={submitting}
             {...(error
               ? {
                   error: true,
@@ -75,7 +111,7 @@ function SendRewardForm() {
         )}
       />
       <Controller
-        name="reason"
+        name="message"
         control={control}
         defaultValue=""
         render={({ field, fieldState: { error } }) => (
@@ -88,6 +124,7 @@ function SendRewardForm() {
             className="send-reward-form__text-field"
             InputLabelProps={{ shrink: true }}
             InputProps={{ ...field }}
+            disabled={submitting}
             {...(error
               ? {
                   error: true,
@@ -98,8 +135,13 @@ function SendRewardForm() {
         )}
       />
       <Box sx={{ pt: 2 }}>
-        <Button color="primary" variant="contained" type="submit">
-          Send Reward
+        <Button
+          color="primary"
+          variant="contained"
+          type="submit"
+          disabled={submitting}
+        >
+          {submitting ? <CircularProgress size={24} /> : "Send Reward"}
         </Button>
       </Box>
     </form>

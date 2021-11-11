@@ -6,6 +6,7 @@
 
 .feed-section__tabs {
   position: relative;
+  z-index: 1;
 }
 
 .feed-section__divider-button-wrapper {
@@ -15,4 +16,8 @@
   transform: translateY(50%);
   background-color: white;
   border-radius: 50vh;
+}
+
+.feed-section__rewards-list-background {
+  background-color: #f7f9fa;
 }

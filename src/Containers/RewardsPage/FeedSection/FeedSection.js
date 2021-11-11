@@ -1,31 +1,45 @@
 import React from "react";
+import "./styles.css";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import { format } from "date-fns";
-
-import "./styles.css";
-import MOCK_DATA from "./MOCK_DATA.json";
+import CircularProgress from "@mui/material/CircularProgress";
+import Fade from "@mui/material/Fade";
 
 import RewardsList from "./RewardsList/RewardsList";
 import SendReward from "./SendReward/SendReward";
 import { TabPanel } from "../../../Components";
+import { rewards } from "../../../api";
+import { reducer, actions } from "./dataReducer";
+import processDataEntry from "./utils/processDataEntry";
 
-const processDataEntry = (dataEntry) => ({
-  ...dataEntry,
-  formattedDate: format(new Date(+dataEntry.createDate), "MMM d, yyyy"),
-});
+const FeedSectionContext = React.createContext();
 
 function FeedSection() {
   const currentUserId = "000001"; // Hardcoded value for demo. Related to value in MOCK_DATA
+  const [loading, setLoading] = React.useState(false);
   const [value, setValue] = React.useState(0);
-  const [data, setData] = React.useState([]);
+  const [dataState, dataDispatch] = React.useReducer(reducer, []);
+
+  const sortedData = dataState.sort((a, b) => b.createDate - a.createDate);
 
   React.useEffect(() => {
-    Promise.resolve({ data: MOCK_DATA }).then(({ data: fetchedData }) => {
-      const processedData = fetchedData.map(processDataEntry);
-      setData(processedData);
-    });
+    setLoading(true);
+    rewards
+      .getAllRewards()
+      .then((response) => {
+        if (
+          response.status &&
+          response.status === 200 &&
+          Array.isArray(response.data)
+        ) {
+          const processedData = response.data.map(processDataEntry);
+          dataDispatch(actions.setData(processedData));
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const handleChange = (event, newValue) => {
@@ -33,31 +47,54 @@ function FeedSection() {
   };
 
   return (
-    <div className="feed-section">
-      <Box
-        className="feed-section__tabs"
-        sx={{ borderBottom: 1, borderBottomColor: "divider" }}
-      >
-        <Tabs value={value} onChange={handleChange}>
-          <Tab label="Feed" />
-          <Tab label="My Rewards" />
-        </Tabs>
-        <div className="feed-section__divider-button-wrapper">
-          <SendReward />
+    <FeedSectionContext.Provider value={{ dataDispatch }}>
+      <div className="feed-section">
+        <Box
+          className="feed-section__tabs"
+          sx={{ borderBottom: 1, borderBottomColor: "divider" }}
+        >
+          <Tabs value={value} onChange={handleChange}>
+            <Tab label="Feed" />
+            <Tab label="My Rewards" />
+          </Tabs>
+          <div className="feed-section__divider-button-wrapper">
+            <SendReward />
+          </div>
+        </Box>
+        <div className="flex flex-col flex-grow">
+          {loading ? (
+            <Box className="flex flex-grow items-center justify-center feed-section__rewards-list-background">
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Fade in={!loading} timeout={1000}>
+              <div>
+                <TabPanel
+                  value={value}
+                  index={0}
+                  className="flex flex-col flex-grow"
+                >
+                  <RewardsList data={sortedData} />
+                </TabPanel>
+                <TabPanel
+                  value={value}
+                  index={1}
+                  className="flex flex-col flex-grow"
+                >
+                  <RewardsList
+                    data={sortedData.filter(
+                      ({ userId }) => userId === currentUserId
+                    )}
+                  />
+                </TabPanel>
+              </div>
+            </Fade>
+          )}
         </div>
-      </Box>
-      <div className="flex flex-col flex-grow">
-        <TabPanel value={value} index={0} className="flex flex-col flex-grow">
-          <RewardsList data={data} />
-        </TabPanel>
-        <TabPanel value={value} index={1} className="flex flex-col flex-grow">
-          <RewardsList
-            data={data.filter(({ userId }) => userId === currentUserId)}
-          />
-        </TabPanel>
       </div>
-    </div>
+    </FeedSectionContext.Provider>
   );
 }
 
 export default FeedSection;
+export { FeedSectionContext };
