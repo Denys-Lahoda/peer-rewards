@@ -1,0 +1,23 @@
+.feed-section {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.feed-section__tabs {
+  position: relative;
+  z-index: 1;
+}
+
+.feed-section__divider-button-wrapper {
+  position: absolute;
+  right: 60px;
+  bottom: 0;
+  transform: translateY(50%);
+  background-color: white;
+  border-radius: 50vh;
+}
+
+.feed-section__rewards-list-background {
+  background-color: #f7f9fa;
+}

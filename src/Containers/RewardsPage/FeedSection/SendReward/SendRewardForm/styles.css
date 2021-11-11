@@ -1,0 +1,10 @@
+.send-reward-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.send-reward-form__text-field {
+  width: 100%;
+  padding-bottom: 1rem;
+}

@@ -1,0 +1,13 @@
+.reward-list {
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: #f7f9fa;
+}
+
+.reward-list > * {
+  padding-bottom: 1rem;
+}
+
+.reward-list > *:last-child {
+  padding-bottom: 0;
+}
