@@ -11,6 +11,7 @@ const MOCK_ENTRY = {
 };
 
 const sendReward = (data) => {
+  // Since it's dummy api, we generate required fields
   const id = Math.random().toString(36).substr(2, 9);
   const userId = Math.random().toString(36).substr(2, 9);
   const createDate = new Date().valueOf();

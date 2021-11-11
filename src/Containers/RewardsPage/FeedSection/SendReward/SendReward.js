@@ -7,15 +7,9 @@ import Modal from "@mui/material/Modal";
 
 import SendRewardForm from "./SendRewardForm/SendRewardForm";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+const paper_style = {
   width: [320, 400],
   bgcolor: "background.paper",
-  boxShadow: 12,
-  p: 4,
 };
 
 function SendReward() {
@@ -29,7 +23,7 @@ function SendReward() {
         <AddIcon sx={{ fontSize: "2.5rem" }} />
       </IconButton>
       <Modal open={open} onClose={handleClose}>
-        <Paper sx={style}>
+        <Paper className="send-reward__paper" sx={paper_style}>
           <SendRewardForm />
         </Paper>
       </Modal>

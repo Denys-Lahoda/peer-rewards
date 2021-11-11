@@ -19,6 +19,7 @@ const schema = z.object({
   message: z.string().nonempty({ message: "Required" }),
 });
 
+// Required for reset
 const defaultValues = {
   userFullName: "",
   amount: "",
@@ -35,7 +36,6 @@ function SendRewardForm() {
 
   const onSubmit = (data) => {
     setSubmitting(true);
-    console.log(data);
 
     const payload = { ...data };
 
@@ -43,7 +43,7 @@ function SendRewardForm() {
       .sendReward(payload)
       .then((response) => {
         if (response.status === 200) {
-          const processedDataEntry = processDataEntry(response.data);
+          const processedDataEntry = processDataEntry(response.data); // Add formattedDate
           context.dataDispatch(actions.addItem(processedDataEntry));
         }
       })
@@ -54,7 +54,7 @@ function SendRewardForm() {
   };
 
   const checkKeyDown = (e) => {
-    if (e.keyCode === 13) e.preventDefault();
+    if (e.keyCode === 13) e.preventDefault(); // Prevent submit on pressing enter
   };
 
   return (

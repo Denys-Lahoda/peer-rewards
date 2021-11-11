@@ -18,13 +18,15 @@ const FeedSectionContext = React.createContext();
 function FeedSection() {
   const currentUserId = "000001"; // Hardcoded value for demo. Related to value in MOCK_DATA
   const [loading, setLoading] = React.useState(false);
-  const [value, setValue] = React.useState(0);
+  const [activeTab, setActiveTab] = React.useState(0);
+  // Reward items reducer. Array. Maybe it's overkill to write reducer for test assigment. I just wanted to show how I would solve task if it's real world task.
   const [dataState, dataDispatch] = React.useReducer(reducer, []);
 
-  const sortedData = dataState.sort((a, b) => b.createDate - a.createDate);
+  const sortedData = dataState.sort((a, b) => b.createDate - a.createDate); // Sort by createDate, descending
 
   React.useEffect(() => {
     setLoading(true);
+    // Dummy rest API, just to simulate things
     rewards
       .getAllRewards()
       .then((response) => {
@@ -33,7 +35,7 @@ function FeedSection() {
           response.status === 200 &&
           Array.isArray(response.data)
         ) {
-          const processedData = response.data.map(processDataEntry);
+          const processedData = response.data.map(processDataEntry); // Add formattedDate
           dataDispatch(actions.setData(processedData));
         }
       })
@@ -43,7 +45,7 @@ function FeedSection() {
   }, []);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    setActiveTab(newValue);
   };
 
   return (
@@ -53,7 +55,7 @@ function FeedSection() {
           className="feed-section__tabs"
           sx={{ borderBottom: 1, borderBottomColor: "divider" }}
         >
-          <Tabs value={value} onChange={handleChange}>
+          <Tabs value={activeTab} onChange={handleChange}>
             <Tab label="Feed" />
             <Tab label="My Rewards" />
           </Tabs>
@@ -70,14 +72,14 @@ function FeedSection() {
             <Fade in={!loading} timeout={1000}>
               <div>
                 <TabPanel
-                  value={value}
+                  value={activeTab}
                   index={0}
                   className="flex flex-col flex-grow"
                 >
                   <RewardsList data={sortedData} />
                 </TabPanel>
                 <TabPanel
-                  value={value}
+                  value={activeTab}
                   index={1}
                   className="flex flex-col flex-grow"
                 >

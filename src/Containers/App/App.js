@@ -8,7 +8,9 @@ import { RewardsPage } from "../index";
 export class App extends Component {
   render() {
     return (
+      // injectFirst is Material UI utility that prioritized custom classes above framework classes
       <StyledEngineProvider injectFirst>
+        {/* CSS normalization from MUI */}
         <CssBaseline />
         <Container maxWidth="lg" sx={{ height: "100vh" }}>
           <RewardsPage />

@@ -5,8 +5,8 @@ import Typography from "@mui/material/Typography";
 import { UserAvatar, UserFullName } from "../../../Components";
 
 function UserSection() {
-  const myRewardsValue = 250;
-  const giveValue = 100;
+  const myRewardsValue = 250; // hardcoded value from mock
+  const giveValue = 100; // hardcoded value from mock
 
   return (
     <div className="user-section">
