@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles.css";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import { useForm, Controller } from "react-hook-form";
@@ -26,7 +26,7 @@ const defaultValues = {
   message: "",
 };
 
-function SendRewardForm() {
+function SendRewardForm({ handleClose }) {
   const context = React.useContext(FeedSectionContext);
   const [submitting, setSubmitting] = React.useState(false);
   const { control, handleSubmit, reset } = useForm({
@@ -50,6 +50,7 @@ function SendRewardForm() {
       .finally(() => {
         reset();
         setSubmitting(false);
+        handleClose();
       });
   };
 
@@ -134,7 +135,15 @@ function SendRewardForm() {
           />
         )}
       />
-      <Box sx={{ pt: 2 }}>
+      <Stack direction="row" spacing={2}>
+        <Button
+          color="primary"
+          variant="outlined"
+          onClick={handleClose}
+          disabled={submitting}
+        >
+          Cancel
+        </Button>
         <Button
           color="primary"
           variant="contained"
@@ -143,7 +152,7 @@ function SendRewardForm() {
         >
           {submitting ? <CircularProgress size={24} /> : "Send Reward"}
         </Button>
-      </Box>
+      </Stack>
     </form>
   );
 }
